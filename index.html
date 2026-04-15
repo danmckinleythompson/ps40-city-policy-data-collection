@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PS40 · City Policy Audit</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-title">PS40 · CITY POLICY AUDIT</div>
+  <div class="nav-btns" id="nav-btns"></div>
+</div>
+
+<div class="content">
+
+<div id="survey-view">
+
+  <!-- ── intro ───────────────────────────────────────────── -->
+  <div class="card" id="intro">
+    <div class="hero">
+      <div class="icon">🏛️</div>
+      <h1>Audit a U.S. city's policies</h1>
+      <p class="lede">You'll be assigned one of the 485 U.S. cities in our sample. Your job is to find out whether your city has adopted three specific local policies and record what you find. The whole thing takes about fifteen minutes per city.</p>
+      <button id="claim-btn" class="btn btn-primary">Get my city →</button>
+      <p id="claim-error" class="hidden"></p>
+    </div>
+  </div>
+
+  <!-- ── form ────────────────────────────────────────────── -->
+  <div class="card hidden" id="form-card">
+    <h2>Your city: <span id="city-name"></span></h2>
+    <p style="font-family:var(--sans);font-size:14px;color:var(--text-muted);margin-bottom:24px;line-height:1.65">
+      For each policy below, mark <strong>Yes</strong>, <strong>No</strong>, or <strong>Unsure</strong>, and paste the URL(s) you used as evidence. If you can't find clear documentation, mark Unsure — don't guess.
+    </p>
+
+    <form id="response-form">
+
+      <div class="policy-block">
+        <h3>1. Body camera mandate</h3>
+        <p class="policy-question">Does <span class="city-inline"></span> require its police officers to wear body cameras while on duty?</p>
+        <ul class="rubric">
+          <li><strong>Yes</strong> if the city has adopted a law, ordinance, resolution, or formal department policy requiring officers to wear body-worn cameras. If your state has a statewide mandate covering this city and the city has no separate policy, still mark Yes and note "state mandate" in the explanation.</li>
+          <li><strong>No</strong> if you find clear evidence the city has not adopted such a policy.</li>
+          <li><strong>Unsure</strong> if you can't find clear documentation either way.</li>
+        </ul>
+        <div class="field-label">Your answer</div>
+        <div class="radio-row" data-group="bodycam_answer">
+          <label class="radio-opt"><input type="radio" name="bodycam_answer" value="yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="bodycam_answer" value="no"> No</label>
+          <label class="radio-opt"><input type="radio" name="bodycam_answer" value="unsure"> Unsure</label>
+        </div>
+        <div class="field-label">Evidence</div>
+        <textarea name="bodycam_notes" rows="3" placeholder="Paste the URL(s) and a brief note explaining your answer."></textarea>
+      </div>
+
+      <div class="policy-block">
+        <h3>2. LGBTQ+ non-discrimination ordinance</h3>
+        <p class="policy-question">Has <span class="city-inline"></span> passed an ordinance banning discrimination based on sexual orientation and/or gender identity?</p>
+        <ul class="rubric">
+          <li><strong>Yes</strong> if an officially adopted city ordinance explicitly lists sexual orientation and/or gender identity as protected categories in employment, housing, or public accommodations, with local enforcement.</li>
+          <li><strong>No</strong> if no such ordinance exists. General diversity / inclusion / DEI statements without explicit non-discrimination language and enforcement do <em>not</em> count.</li>
+          <li><strong>Unsure</strong> if you can't tell.</li>
+        </ul>
+        <div class="field-label">Your answer</div>
+        <div class="radio-row" data-group="nondisc_answer">
+          <label class="radio-opt"><input type="radio" name="nondisc_answer" value="yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="nondisc_answer" value="no"> No</label>
+          <label class="radio-opt"><input type="radio" name="nondisc_answer" value="unsure"> Unsure</label>
+        </div>
+        <div class="field-label">Evidence</div>
+        <textarea name="nondisc_notes" rows="3" placeholder="Paste the URL(s) and a brief note explaining your answer."></textarea>
+      </div>
+
+      <div class="policy-block">
+        <h3>3. Zero-emission fleet plan</h3>
+        <p class="policy-question">Has <span class="city-inline"></span> formally committed to transitioning its vehicle fleet to zero-emission vehicles?</p>
+        <ul class="rubric">
+          <li><strong>Yes</strong> if a city ordinance, resolution, or formally adopted plan commits to transitioning some or all city-owned vehicles to zero-emission vehicles (electric, hydrogen) with a clear target year or requirement.</li>
+          <li><strong>No</strong> if no such commitment exists. Aspirational mentions in a sustainability plan without targets/timelines do <em>not</em> count. Hybrid-only or "low-emission" goals do <em>not</em> count.</li>
+          <li><strong>Unsure</strong> if you can't tell.</li>
+        </ul>
+        <div class="field-label">Your answer</div>
+        <div class="radio-row" data-group="zeroemiss_answer">
+          <label class="radio-opt"><input type="radio" name="zeroemiss_answer" value="yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="zeroemiss_answer" value="no"> No</label>
+          <label class="radio-opt"><input type="radio" name="zeroemiss_answer" value="unsure"> Unsure</label>
+        </div>
+        <div class="field-label">Evidence</div>
+        <textarea name="zeroemiss_notes" rows="3" placeholder="Paste the URL(s) and a brief note explaining your answer."></textarea>
+      </div>
+
+      <div class="identity-grid">
+        <div>
+          <div class="field-label">Your name</div>
+          <input type="text" name="student_name" required>
+        </div>
+        <div>
+          <div class="field-label">Student ID</div>
+          <input type="text" name="student_id" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit →</button>
+      <p id="submit-msg" class="hidden"></p>
+    </form>
+  </div>
+
+  <!-- ── thanks ──────────────────────────────────────────── -->
+  <div class="card hidden" id="thanks-card">
+    <div class="hero">
+      <div class="icon" style="color:var(--green)">✓</div>
+      <h2 style="color:var(--green)">Thank you!</h2>
+      <p class="lede">Your response has been recorded. You can close this tab — or scroll down to see the live class results below.</p>
+    </div>
+  </div>
+
+</div><!-- /#survey-view -->
+
+<div id="results-view" class="hidden">
+
+  <!-- ── results ─────────────────────────────────────────── -->
+  <div class="results-head">
+    <h2>Live class results</h2>
+    <p style="font-family:var(--sans);font-size:13px;color:var(--text-muted);margin:0">How student-collected policy data lines up with public opinion and partisanship.</p>
+  </div>
+
+    <div class="card">
+      <div class="kpi-row">
+        <div>
+          <div class="kpi-num" id="kpi-assigned">—</div>
+          <div class="kpi-label">Cities assigned</div>
+        </div>
+        <div>
+          <div class="kpi-num" id="kpi-submitted">—</div>
+          <div class="kpi-label">Responses collected</div>
+        </div>
+        <div>
+          <div class="kpi-num" id="kpi-total">485</div>
+          <div class="kpi-label">Total cities</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="plot-grid">
+      <div class="plot-card">
+        <div class="plot-title">Body-cam policy vs. public support</div>
+        <canvas id="plot1"></canvas>
+        <p class="plot-msg" id="plot1-msg"></p>
+      </div>
+      <div class="plot-card">
+        <div class="plot-title">Body-cam policy vs. 2024 Dem vote share</div>
+        <canvas id="plot2"></canvas>
+        <p class="plot-msg" id="plot2-msg"></p>
+      </div>
+      <div class="plot-card">
+        <div class="plot-title">Non-discrimination ordinance vs. 2024 Dem vote share</div>
+        <canvas id="plot3"></canvas>
+        <p class="plot-msg" id="plot3-msg"></p>
+      </div>
+      <div class="plot-card">
+        <div class="plot-title">Zero-emission fleet plan vs. 2024 Dem vote share</div>
+        <canvas id="plot4"></canvas>
+        <p class="plot-msg" id="plot4-msg"></p>
+      </div>
+    </div>
+
+</div><!-- /#results-view -->
+
+</div>
+
+<div class="toast hidden" id="toast">Saving…</div>
+
+<script src="app.js"></script>
+</body>
+</html>
