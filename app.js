@@ -4,8 +4,10 @@ const CONFIG = {
 };
 
 const TOTAL_CITIES = 485;
+const NUM_STEPS = 4;
 let claimedFips = null;
 let currentView = "survey";
+let currentStep = 1;
 const charts = {};
 
 // Global Chart.js theming so plots match the rest of the page.
@@ -99,6 +101,78 @@ function initRadioGroups() {
   });
 }
 
+// ---------- stepped survey ----------
+
+// Validation: each policy step needs a radio picked. Step 4 needs name + id.
+function validateStep(step) {
+  const names = {
+    1: ["bodycam_answer"],
+    2: ["nondisc_answer"],
+    3: ["zeroemiss_answer"],
+    4: [],
+  };
+  for (const n of names[step]) {
+    if (!document.querySelector(`input[name="${n}"]:checked`)) {
+      return `Please pick Yes, No, or Unsure before continuing.`;
+    }
+  }
+  if (step === 4) {
+    const name = document.querySelector('input[name="student_name"]').value.trim();
+    const sid = document.querySelector('input[name="student_id"]').value.trim();
+    if (!name || !sid) return "Please enter your name and student ID.";
+  }
+  return null;
+}
+
+function renderProgressDots() {
+  const el = document.getElementById("progress-dots");
+  while (el.firstChild) el.removeChild(el.firstChild);
+  for (let i = 1; i <= NUM_STEPS; i++) {
+    const d = document.createElement("div");
+    d.className = "dot";
+    if (i === currentStep) d.classList.add("active");
+    else if (i < currentStep) d.classList.add("done");
+    el.appendChild(d);
+  }
+}
+
+function showStep(step) {
+  currentStep = step;
+  document.querySelectorAll(".step").forEach(s => {
+    s.classList.toggle("hidden", Number(s.dataset.step) !== step);
+  });
+  const back = document.getElementById("step-back");
+  const next = document.getElementById("step-next");
+  const submit = document.getElementById("step-submit");
+  back.disabled = step === 1;
+  if (step === NUM_STEPS) {
+    next.classList.add("hidden");
+    submit.classList.remove("hidden");
+  } else {
+    next.classList.remove("hidden");
+    submit.classList.add("hidden");
+  }
+  document.getElementById("submit-msg").classList.add("hidden");
+  renderProgressDots();
+  document.getElementById("form-card").scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+function stepNext() {
+  const err = validateStep(currentStep);
+  const msg = document.getElementById("submit-msg");
+  if (err) {
+    msg.textContent = err;
+    msg.className = "error";
+    msg.classList.remove("hidden");
+    return;
+  }
+  if (currentStep < NUM_STEPS) showStep(currentStep + 1);
+}
+
+function stepBack() {
+  if (currentStep > 1) showStep(currentStep - 1);
+}
+
 // ---------- claim / submit ----------
 
 async function claimCity() {
@@ -117,6 +191,7 @@ async function claimCity() {
     document.querySelectorAll(".city-inline").forEach(el => { el.textContent = label; });
     document.getElementById("intro").classList.add("hidden");
     document.getElementById("form-card").classList.remove("hidden");
+    showStep(1);
     window.scrollTo({top: 0, behavior: "smooth"});
     refresh();
   } catch (e) {
@@ -129,6 +204,18 @@ async function claimCity() {
 
 async function submitResponse(ev) {
   ev.preventDefault();
+  // Revalidate every step in case the student edited an earlier answer.
+  for (let s = 1; s <= NUM_STEPS; s++) {
+    const err = validateStep(s);
+    if (err) {
+      showStep(s);
+      const msg = document.getElementById("submit-msg");
+      msg.textContent = err;
+      msg.className = "error";
+      msg.classList.remove("hidden");
+      return;
+    }
+  }
   const form = ev.target;
   const fd = new FormData(form);
   const payload = {
@@ -144,23 +231,8 @@ async function submitResponse(ev) {
     student_id: fd.get("student_id") || "",
   };
 
-  const missing = ["bodycam_answer", "nondisc_answer", "zeroemiss_answer"]
-    .filter(k => !payload[k]);
   const msg = document.getElementById("submit-msg");
-  msg.classList.remove("hidden");
-  if (missing.length) {
-    msg.textContent = "Please pick Yes / No / Unsure for each policy.";
-    msg.className = "error";
-    return;
-  }
-  if (!payload.student_name || !payload.student_id) {
-    msg.textContent = "Please enter your name and student ID.";
-    msg.className = "error";
-    return;
-  }
-
-  msg.textContent = "";
-  msg.className = "hidden";
+  msg.classList.add("hidden");
   toast("Submitting…", 5000);
 
   const data = await apiPost(payload);
@@ -306,5 +378,7 @@ function renderPlots(rows) {
 initRadioGroups();
 document.getElementById("claim-btn").addEventListener("click", claimCity);
 document.getElementById("response-form").addEventListener("submit", submitResponse);
+document.getElementById("step-next").addEventListener("click", stepNext);
+document.getElementById("step-back").addEventListener("click", stepBack);
 renderNav();
 

@@ -248,10 +248,64 @@ textarea:focus, input[type="text"]:focus {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  margin: 24px 0 20px;
-  padding-top: 24px;
+  margin: 16px 0 8px;
+}
+
+/* ---------- stepped survey ---------- */
+
+.city-banner {
+  text-align: center;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.city-banner .field-label {
+  margin-bottom: 4px;
+}
+
+.city-banner h2 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 0.25s;
+}
+
+.dot.active { background: var(--accent); }
+.dot.done   { background: var(--accent); opacity: 0.4; }
+
+.step h3 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.step .policy-question {
+  margin-bottom: 14px;
+}
+
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
   border-top: 1px solid var(--border);
 }
+
+.step-nav .btn[disabled] { visibility: hidden; }
 
 .identity-grid > div { display: flex; flex-direction: column; }
 

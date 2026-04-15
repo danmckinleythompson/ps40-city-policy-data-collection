@@ -32,15 +32,18 @@
 
   <!-- ── form ────────────────────────────────────────────── -->
   <div class="card hidden" id="form-card">
-    <h2>Your city: <span id="city-name"></span></h2>
-    <p style="font-family:var(--sans);font-size:14px;color:var(--text-muted);margin-bottom:24px;line-height:1.65">
-      For each policy below, mark <strong>Yes</strong>, <strong>No</strong>, or <strong>Unsure</strong>, and paste the URL(s) you used as evidence. If you can't find clear documentation, mark Unsure — don't guess.
-    </p>
+    <div class="city-banner">
+      <div class="field-label">Your city</div>
+      <h2 id="city-name"></h2>
+    </div>
+
+    <div class="progress-dots" id="progress-dots"></div>
 
     <form id="response-form">
 
-      <div class="policy-block">
-        <h3>1. Body camera mandate</h3>
+      <!-- Step 1: body cam -->
+      <div class="step" data-step="1">
+        <h3>Body camera mandate</h3>
         <p class="policy-question">Does <span class="city-inline"></span> require its police officers to wear body cameras while on duty?</p>
         <ul class="rubric">
           <li><strong>Yes</strong> if the city has adopted a law, ordinance, resolution, or formal department policy requiring officers to wear body-worn cameras. If your state has a statewide mandate covering this city and the city has no separate policy, still mark Yes and note "state mandate" in the explanation.</li>
@@ -48,7 +51,7 @@
           <li><strong>Unsure</strong> if you can't find clear documentation either way.</li>
         </ul>
         <div class="field-label">Your answer</div>
-        <div class="radio-row" data-group="bodycam_answer">
+        <div class="radio-row">
           <label class="radio-opt"><input type="radio" name="bodycam_answer" value="yes"> Yes</label>
           <label class="radio-opt"><input type="radio" name="bodycam_answer" value="no"> No</label>
           <label class="radio-opt"><input type="radio" name="bodycam_answer" value="unsure"> Unsure</label>
@@ -57,8 +60,9 @@
         <textarea name="bodycam_notes" rows="3" placeholder="Paste the URL(s) and a brief note explaining your answer."></textarea>
       </div>
 
-      <div class="policy-block">
-        <h3>2. LGBTQ+ non-discrimination ordinance</h3>
+      <!-- Step 2: non-discrimination -->
+      <div class="step hidden" data-step="2">
+        <h3>LGBTQ+ non-discrimination ordinance</h3>
         <p class="policy-question">Has <span class="city-inline"></span> passed an ordinance banning discrimination based on sexual orientation and/or gender identity?</p>
         <ul class="rubric">
           <li><strong>Yes</strong> if an officially adopted city ordinance explicitly lists sexual orientation and/or gender identity as protected categories in employment, housing, or public accommodations, with local enforcement.</li>
@@ -66,7 +70,7 @@
           <li><strong>Unsure</strong> if you can't tell.</li>
         </ul>
         <div class="field-label">Your answer</div>
-        <div class="radio-row" data-group="nondisc_answer">
+        <div class="radio-row">
           <label class="radio-opt"><input type="radio" name="nondisc_answer" value="yes"> Yes</label>
           <label class="radio-opt"><input type="radio" name="nondisc_answer" value="no"> No</label>
           <label class="radio-opt"><input type="radio" name="nondisc_answer" value="unsure"> Unsure</label>
@@ -75,8 +79,9 @@
         <textarea name="nondisc_notes" rows="3" placeholder="Paste the URL(s) and a brief note explaining your answer."></textarea>
       </div>
 
-      <div class="policy-block">
-        <h3>3. Zero-emission fleet plan</h3>
+      <!-- Step 3: zero-emission fleet -->
+      <div class="step hidden" data-step="3">
+        <h3>Zero-emission fleet plan</h3>
         <p class="policy-question">Has <span class="city-inline"></span> formally committed to transitioning its vehicle fleet to zero-emission vehicles?</p>
         <ul class="rubric">
           <li><strong>Yes</strong> if a city ordinance, resolution, or formally adopted plan commits to transitioning some or all city-owned vehicles to zero-emission vehicles (electric, hydrogen) with a clear target year or requirement.</li>
@@ -84,7 +89,7 @@
           <li><strong>Unsure</strong> if you can't tell.</li>
         </ul>
         <div class="field-label">Your answer</div>
-        <div class="radio-row" data-group="zeroemiss_answer">
+        <div class="radio-row">
           <label class="radio-opt"><input type="radio" name="zeroemiss_answer" value="yes"> Yes</label>
           <label class="radio-opt"><input type="radio" name="zeroemiss_answer" value="no"> No</label>
           <label class="radio-opt"><input type="radio" name="zeroemiss_answer" value="unsure"> Unsure</label>
@@ -93,18 +98,27 @@
         <textarea name="zeroemiss_notes" rows="3" placeholder="Paste the URL(s) and a brief note explaining your answer."></textarea>
       </div>
 
-      <div class="identity-grid">
-        <div>
-          <div class="field-label">Your name</div>
-          <input type="text" name="student_name" required>
-        </div>
-        <div>
-          <div class="field-label">Student ID</div>
-          <input type="text" name="student_id" required>
+      <!-- Step 4: student info -->
+      <div class="step hidden" data-step="4">
+        <h3>Your information</h3>
+        <p class="policy-question">Almost done — tell us who you are so we can record your contribution.</p>
+        <div class="identity-grid">
+          <div>
+            <div class="field-label">Your name</div>
+            <input type="text" name="student_name" autocomplete="name">
+          </div>
+          <div>
+            <div class="field-label">Student ID</div>
+            <input type="text" name="student_id" autocomplete="off">
+          </div>
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary">Submit →</button>
+      <div class="step-nav">
+        <button type="button" class="btn btn-secondary" id="step-back">← Back</button>
+        <button type="button" class="btn btn-primary" id="step-next">Next →</button>
+        <button type="submit" class="btn btn-primary hidden" id="step-submit">Submit →</button>
+      </div>
       <p id="submit-msg" class="hidden"></p>
     </form>
   </div>
